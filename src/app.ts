@@ -3,8 +3,10 @@ import 'dotenv/config'
 import { startDatabase } from "./database"
 import { getAllDeveloper, registerDeveloper, getDevById, addInfoToDev, updateDevData, updateDevInfo, deleteDev } from "./functions/developers.func"
 import { deleteProj, getAllProjects, getProjectsById, registerProject, updateProject } from "./functions/projects.func"
+import { addTechToProj, deleteTechFromProj, getProjectsByDeveloperId } from "./functions/projectTecnologies.func"
 import { checkDevIdExists, checkEmailIsUnique } from "./middlewares/middleware.developers"
 import { checkDevIdExistsForProj, checkProjIdExists } from "./middlewares/middleware.project"
+import { validateTech } from "./middlewares/middleware.technologies"
 
 const app: Application = express()
 app.use(express.json())
@@ -34,6 +36,12 @@ app.get('/projects/:id', checkProjIdExists, getProjectsById)
 app.patch('/projects/:id', checkProjIdExists, updateProject)
 
 app.delete('/projects/:id', checkProjIdExists, deleteProj)
+
+app.get('/developers/:id/projects', checkDevIdExists, getProjectsByDeveloperId)
+
+app.post('/projects/:id/technologies', checkProjIdExists, validateTech, addTechToProj)
+
+app.delete('/projects/:id/technologies/:name', checkProjIdExists, validateTech, deleteTechFromProj)
 
 
 
