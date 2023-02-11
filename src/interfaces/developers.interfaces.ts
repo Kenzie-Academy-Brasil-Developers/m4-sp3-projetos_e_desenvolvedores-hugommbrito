@@ -10,6 +10,8 @@ export interface DevInfoRequest{
     preferredOS: string,
 }
 
+
+
 export interface Developer extends DeveloperRequest{
     id: number,
 }
@@ -19,8 +21,12 @@ export interface DevInfo extends DevInfoRequest{
     developersId: number
 }
 
+
+
 export interface DevWithInfo extends Developer, DevInfo{}
 
-export type DevInfoResponse = QueryResult<DevInfo>
-export type DeveloperResponse = QueryResult<Developer>
-export type DevWithInfoResponse = QueryResult<DevWithInfo>
+
+
+export type DevInfoResult = QueryResult<DevInfo>
+export type DeveloperResult = QueryResult<Developer>
+export type DevWithInfoResult = QueryResult<DevWithInfo>

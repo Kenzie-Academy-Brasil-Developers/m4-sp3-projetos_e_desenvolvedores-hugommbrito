@@ -3,7 +3,7 @@ import { QueryConfig, QueryResult } from "pg";
 import format from "pg-format";
 import { client } from "../database"
 
-import { Developer, DeveloperRequest, DeveloperResponse, DevInfo, DevInfoRequest, DevInfoResponse, DevWithInfo, DevWithInfoResponse } from "../interfaces/interfaces";
+import { Developer, DeveloperRequest, DeveloperResult, DevInfo, DevInfoRequest, DevInfoResult, DevWithInfo, DevWithInfoResult } from "../interfaces/developers.interfaces";
 
 export const registerDeveloper = async(req:Request, res:Response): Promise<Response> => {
 
@@ -24,7 +24,7 @@ export const registerDeveloper = async(req:Request, res:Response): Promise<Respo
         values: [newDevData.name, newDevData.email]
     }
 
-    const queryResult: DeveloperResponse = await client.query(queryConfig)
+    const queryResult: DeveloperResult = await client.query(queryConfig)
     const newDevResponse: Developer = queryResult.rows[0]
 
     return res.status(201).json(newDevResponse)
@@ -44,7 +44,7 @@ export const getAllDeveloper = async(req:Request, res:Response): Promise<Respons
             ON d.id = di.developers_id;
     `
 
-    const queryResult: DevWithInfoResponse = await client.query(queryString)
+    const queryResult: DevWithInfoResult = await client.query(queryString)
     const getDevResponse: DevWithInfo[] = queryResult.rows
 
     return res.status(200).json(getDevResponse)
@@ -71,7 +71,7 @@ export const getDevById = async(req:Request, res:Response): Promise<Response> =>
         values: [developerId]
     }
 
-    const queryResult: DevWithInfoResponse = await client.query(queryConfig)
+    const queryResult: DevWithInfoResult = await client.query(queryConfig)
     const getDevResponse: DevWithInfo = queryResult.rows[0]
 
     return res.status(200).json(getDevResponse)
@@ -97,10 +97,10 @@ export const addInfoToDev = async(req:Request, res:Response): Promise<Response> 
         values: [newDevInfo.developerSince, newDevInfo.preferredOS, devId]
     }
 
-    const queryResult: DevInfoResponse = await client.query(queryConfig)
-    const newDevInfoResponse: DevInfo = queryResult.rows[0]
+    const queryResult: DevInfoResult = await client.query(queryConfig)
+    const newDevInfoResult: DevInfo = queryResult.rows[0]
 
-    return res.status(201).json(newDevInfoResponse)
+    return res.status(201).json(newDevInfoResult)
 }
 
 export const updateDevData = async(req: Request, res: Response): Promise<Response> => {
@@ -136,7 +136,7 @@ export const updateDevData = async(req: Request, res: Response): Promise<Respons
         values: [devId]
     }
 
-    const updatedDevResponse: Partial<DeveloperResponse> = await client.query(queryConfig)
+    const updatedDevResponse: Partial<DeveloperResult> = await client.query(queryConfig)
     const updatedDev: Developer = updatedDevResponse.rows![0]
 
     return res.status(200).json(updatedDev)
@@ -190,7 +190,7 @@ export const updateDevInfo = async(req: Request, res: Response): Promise<Respons
             values: [devId]
         }
     
-        const updatedDevResponse: Partial<DeveloperResponse> = await client.query(queryConfig2)
+        const updatedDevResponse: Partial<DeveloperResult> = await client.query(queryConfig2)
         const updatedDev: Developer = updatedDevResponse.rows![0]
         
         return res.status(200).json(updatedDev)
